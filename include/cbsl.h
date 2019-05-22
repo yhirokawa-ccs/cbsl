@@ -54,6 +54,8 @@ cbsl_mode      cbsl_get_mode(cbsl_ctx* ctx);
 cbsl_errors    cbsl_set_compression_level(cbsl_ctx* ctx, int clevel);
 int            cbsl_get_compression_level(cbsl_ctx* ctx);
 
+cbsl_errors    cbsl_train_data(cbsl_ctx* ctx, const void* src, uint64_t sample_size, uint64_t total_size);
+
 #if defined(__cplusplus)
 } /* extern "C" */
 #endif

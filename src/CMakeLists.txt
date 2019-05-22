@@ -21,6 +21,7 @@ set(LIB_SOURCES
     write.c
     read.c
     record.c
+    dict.c
     )
 
 set(FLIB_SOURCES

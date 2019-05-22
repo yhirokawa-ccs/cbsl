@@ -38,11 +38,16 @@ struct cbsl_ctx_
   uint64_t      out_buffer_pos;
   uint64_t      out_buffer_used;
   cbsl_mode     mode;
+  byte_t*       dictionary;
+  size_t        dict_size_used; /* 0: dictionary do not use */
 };
 
 cbsl_errors create_streaming_buffers(cbsl_ctx* ctx);
 
+#define MAX_DICTIONARY_SIZE 102400
+
 #define MIN(x, y) (x) < (y) ? (x) : (y)
+#define MAX(x, y) (x) > (y) ? (x) : (y)
 
 #ifdef CBSL_DEBUG
 # include <assert.h>

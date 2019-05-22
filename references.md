@@ -233,6 +233,25 @@ cbsl_errors cbsl_set_compression_level(cbsl_ctx* ctx, int clevel);
         fail     : -1
  */
 int cbsl_get_compression_level(cbsl_ctx* ctx);
+
+/*
+   [brief]
+        sets training data sets. it use the dictionary of zstd.
+   [arguments]
+        ctx      : context pointer
+        src      : traning source
+        sample_size: size of a sample (>= 8)
+        total_size : total size of a source
+   [return]
+        success  : cbsl_success
+        fail     : cbsl_error
+   [note]
+        this function is usable if `cbsl_get_mode(ctx) == cbsl_store_mode`.
+        they refer up to 100 KiB of a source data from `src` head address.
+        for creating the efficient dictionary, zstd may prefers a largest array in your application.
+        the function must be invoked before `cbsl_write()` or `cbsl_record()`.
+ */
+cbsl_errors cbsl_train_data(cbsl_ctx* ctx, const void* src, size_t sample_size, uint64_t total_size);
 ```
 
 ### Fortran
@@ -405,6 +424,28 @@ function cbslf_get_compression_level(ctx, errcode) result(clevel)
   integer(4), intent(out), optional :: errcode
   ingeter(4),                       :: clevel
 end function
+
+!
+! [brief]
+!      this is a generic interface.
+!      sets training data sets. it use the dictionary of zstd.
+!      please read C API note.
+! [supported types of src]
+!      integer(4), integer(8), real(4), real(8), complex(4), complex(8) by up to 7-dimensional array
+! [arguments]
+!      ctx      : context pointer
+!      src      : traning source
+!      sample_size: size of a sample (> 8)
+!      total_size : total size of a source
+!      errcode  : error code (return value)
+!
+interface cbslf_train_data(ctx, src, sample_size, total_size, errcode)
+  type(cbslf_context), intent(in)   :: ctx
+  GENERIC_TYPE,        intent(in)   :: src
+  integer(4),          intent(in)   :: sample_size
+  integer(4),          intent(in)   :: total_size
+  integer(4), intent(out), optional :: errcode
+end interface
 ```
 
 ## Data format
@@ -422,7 +463,8 @@ Array-value-type: element type of an array
 ### Header
 
 ```
-[BDATA * 8]: cbsl library version (64-bit integer)
+[BDATA * 8]         : cbsl library version (64-bit integer)
+[BDATA * 100 * 1024]: the dictionary of zstd
 ```
 
 ### C API

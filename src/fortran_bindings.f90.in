@@ -42,6 +42,8 @@ module cbslf
   public :: cbslf_set_compression_level
   public :: cbslf_get_compression_level
 
+  public :: cbslf_train_data
+
 #define PASTE(a,b) a##b
 #define CONCAT(a,b) PASTE(a,b)
 
@@ -88,8 +90,7 @@ __NL__  end if
           module procedure CONCAT(CONCAT(SAVE_LOAD,CONCAT(_array_,DIMS)),CONCAT(_,ROUTINE_NAME))
 
 #define DECLARE_ARRAY_INTERFACE(SAVE_LOAD,ROUTINE_NAME) \
-          DECLARE_SCALAR_INTERFACE(SAVE_LOAD,ROUTINE_NAME) \
-__NL__    DECLARE_ARRAY_INTERFACE_N(SAVE_LOAD,ROUTINE_NAME,1) \
+          DECLARE_ARRAY_INTERFACE_N(SAVE_LOAD,ROUTINE_NAME,1) \
 __NL__    DECLARE_ARRAY_INTERFACE_N(SAVE_LOAD,ROUTINE_NAME,2) \
 __NL__    DECLARE_ARRAY_INTERFACE_N(SAVE_LOAD,ROUTINE_NAME,3) \
 __NL__    DECLARE_ARRAY_INTERFACE_N(SAVE_LOAD,ROUTINE_NAME,4) \
@@ -245,7 +246,22 @@ __NL__        case default \
 __NL__          ret = cbslf_error \
 __NL__      end select \
 __NL__      SET_ERRCODE(ret) \
+__NL__    end subroutine \
+__NL__    subroutine CONCAT(CONCAT(train_array_,CONCAT(DIMS,_)),ROUTINE_NAME)(ctx, src, esize, psize, errcode) \
+__NL__      use, intrinsic :: iso_c_binding, only: c_sizeof, c_int64_t \
+__NL__      type(cbslf_context), intent(in) :: ctx \
+__NL__      DATA_TYPE, intent(in) :: src(CONCAT(FORTRAN_ARRAY_,DIMS)) \
+__NL__      integer(4), intent(in) :: esize, psize \
+__NL__      integer(4), intent(out), optional :: errcode \
+__NL__      integer(4) :: ret \
+__NL__      integer(c_int64_t) :: bsize, cesize, cpsize \
+__NL__      cesize = esize \
+__NL__      cpsize = psize \
+__NL__      bsize = c_sizeof(src(CONCAT(FORTRAN_ARRAY_VALUE_,DIMS))) \
+__NL__      ret = cbsl_train_data(ctx%ctx, loc(src), cesize, cpsize) \
+__NL__      SET_ERRCODE(ret) \
 __NL__    end subroutine
+
 
 #define IMPLEMENT_ARRAY_INTERFACE(ROUTINE_NAME,DATA_TYPE)  \
           IMPLEMENT_SCALAR_INTERFACE(ROUTINE_NAME,DATA_TYPE) \
@@ -347,12 +363,29 @@ private
       integer(c_intptr_t),value,intent(in) :: ctx
       integer(c_int) :: clevel
     end function
+
+    function cbsl_train_data(ctx, src, sample_size, total_size) result(retcode) &
+        bind(C,name='cbsl_train_data')
+      use, intrinsic :: iso_c_binding
+      integer(c_intptr_t),value,intent(in) :: ctx
+      integer(c_intptr_t),value,intent(in) :: src
+      integer(c_int64_t),value,intent(in)  :: sample_size
+      integer(c_int64_t),value,intent(in)  :: total_size
+      integer(c_int) :: retcode
+    end function
   end interface
 
   ! Generic routines
   interface cbslf_write
     DECLARE_SCALAR_INTERFACE(write,character)
     DECLARE_SCALAR_INTERFACE(write,logical)
+
+    DECLARE_SCALAR_INTERFACE(write,integer4)
+    DECLARE_SCALAR_INTERFACE(write,integer8)
+    DECLARE_SCALAR_INTERFACE(write,sreal)
+    DECLARE_SCALAR_INTERFACE(write,dreal)
+    DECLARE_SCALAR_INTERFACE(write,ccomplex)
+    DECLARE_SCALAR_INTERFACE(write,zcomplex)
 
     DECLARE_ARRAY_INTERFACE(write,integer4)
     DECLARE_ARRAY_INTERFACE(write,integer8)
@@ -366,6 +399,13 @@ private
     DECLARE_SCALAR_INTERFACE(read,character)
     DECLARE_SCALAR_INTERFACE(read,logical)
 
+    DECLARE_SCALAR_INTERFACE(read,integer4)
+    DECLARE_SCALAR_INTERFACE(read,integer8)
+    DECLARE_SCALAR_INTERFACE(read,sreal)
+    DECLARE_SCALAR_INTERFACE(read,dreal)
+    DECLARE_SCALAR_INTERFACE(read,ccomplex)
+    DECLARE_SCALAR_INTERFACE(read,zcomplex)
+
     DECLARE_ARRAY_INTERFACE(read,integer4)
     DECLARE_ARRAY_INTERFACE(read,integer8)
     DECLARE_ARRAY_INTERFACE(read,sreal)
@@ -377,6 +417,13 @@ private
   interface cbslf_record
     DECLARE_SCALAR_INTERFACE(record,character)
     DECLARE_SCALAR_INTERFACE(record,logical)
+
+    DECLARE_SCALAR_INTERFACE(record,integer4)
+    DECLARE_SCALAR_INTERFACE(record,integer8)
+    DECLARE_SCALAR_INTERFACE(record,sreal)
+    DECLARE_SCALAR_INTERFACE(record,dreal)
+    DECLARE_SCALAR_INTERFACE(record,ccomplex)
+    DECLARE_SCALAR_INTERFACE(record,zcomplex)
 
     DECLARE_ARRAY_INTERFACE(record,integer4)
     DECLARE_ARRAY_INTERFACE(record,integer8)
@@ -393,6 +440,15 @@ private
     DECLARE_ARRAY_INTERFACE_ALLOCATABLE(record,dreal)
     DECLARE_ARRAY_INTERFACE_ALLOCATABLE(record,ccomplex)
     DECLARE_ARRAY_INTERFACE_ALLOCATABLE(record,zcomplex)
+  end interface
+
+  interface cbslf_train_data
+    DECLARE_ARRAY_INTERFACE(train,integer4)
+    DECLARE_ARRAY_INTERFACE(train,integer8)
+    DECLARE_ARRAY_INTERFACE(train,sreal)
+    DECLARE_ARRAY_INTERFACE(train,dreal)
+    DECLARE_ARRAY_INTERFACE(train,ccomplex)
+    DECLARE_ARRAY_INTERFACE(train,zcomplex)
   end interface
 
 contains

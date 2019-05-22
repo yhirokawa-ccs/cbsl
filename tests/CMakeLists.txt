@@ -25,6 +25,7 @@ add_executable(various_size_array various_size_array.c)
 
 add_executable(cbsl_record       cbsl_record.c)
 add_executable(cbsl_record_array cbsl_record_array.c)
+add_executable(cbsl_train_data   cbsl_train_data.c)
 
 add_executable(fortran_bindings fortran_bindings.f90)
 target_link_libraries(fortran_bindings ${CBSL_FLIB} ${CBSL_LIB} ${ZSTD_LIB})
@@ -86,6 +87,7 @@ add_test(NAME various_size_array COMMAND various_size_array)
 
 add_test(NAME cbsl_record        COMMAND cbsl_record)
 add_test(NAME cbsl_record_array  COMMAND cbsl_record_array)
+add_test(NAME cbsl_train_data    COMMAND cbsl_train_data)
 
 
 #
