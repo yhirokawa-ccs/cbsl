@@ -309,7 +309,7 @@ private
       use, intrinsic :: iso_c_binding
       integer(c_intptr_t),value,intent(in) :: ctx
       integer(c_intptr_t),value,intent(in) :: pdata
-      integer(c_intptr_t),value,intent(in) :: psize
+      integer(c_int64_t),value,intent(in)  :: psize
       integer(c_int) :: retcode
     end function
 
@@ -318,7 +318,7 @@ private
       use, intrinsic :: iso_c_binding
       integer(c_intptr_t),value,intent(in) :: ctx
       integer(c_intptr_t),value,intent(in) :: pdata
-      integer(c_intptr_t),value,intent(in) :: psize
+      integer(c_int64_t),value,intent(in)  :: psize
       integer(c_int) :: retcode
     end function
 
@@ -327,7 +327,7 @@ private
       use, intrinsic :: iso_c_binding
       integer(c_intptr_t),value,intent(in) :: ctx
       integer(c_intptr_t),value,intent(in) :: pdata
-      integer(c_intptr_t),value,intent(in) :: psize
+      integer(c_int64_t),value,intent(in)  :: psize
       integer(c_int) :: retcode
     end function
 
