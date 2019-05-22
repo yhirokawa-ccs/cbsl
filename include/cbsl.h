@@ -52,7 +52,7 @@ cbsl_errors    cbsl_record_heap(cbsl_ctx* ctx, void** data, uint64_t* size);
 
 cbsl_mode      cbsl_get_mode(cbsl_ctx* ctx);
 cbsl_errors    cbsl_set_compression_level(cbsl_ctx* ctx, int clevel);
-int             cbsl_get_compression_level(cbsl_ctx* ctx);
+int            cbsl_get_compression_level(cbsl_ctx* ctx);
 
 #if defined(__cplusplus)
 } /* extern "C" */

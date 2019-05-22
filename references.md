@@ -253,7 +253,7 @@ function cbslf_open(open_mode, path, errcode) result(ctx)
   integer(4),   intent(in)          :: open_mode
   character(*), intent(in)          :: path
   integer(4), intent(out), optional :: errcode
-  type(cbslf_context)              :: ctx
+  type(cbslf_context)               :: ctx
 end function
 
 !
@@ -265,7 +265,7 @@ end function
 !      errcode  : error code
 !
 subroutine cbslf_close(ctx, errcode)
-  type(cbslf_context), intent(in)  :: ctx
+  type(cbslf_context), intent(in)   :: ctx
   integer(4), intent(out), optional :: errcode
 end subroutine
 
@@ -278,7 +278,7 @@ end subroutine
 !      errcode  : error code
 !
 subroutine cbslf_flush(ctx, errcode)
-  type(cbslf_context), intent(in)  :: ctx
+  type(cbslf_context), intent(in)   :: ctx
   integer(4), intent(out), optional :: errcode
 end subroutine
 
@@ -297,7 +297,7 @@ end subroutine
 !      errcode  : error code
 !
 interface cbslf_write(ctx, data, errcode)
-  type(cbslf_context), intent(in)  :: ctx
+  type(cbslf_context), intent(in)   :: ctx
   GENERIC_TYPE,         intent(in)  :: data
   integer(4), intent(out), optional :: errcode
 end interface
@@ -316,7 +316,7 @@ end interface
 !      errcode  : error code
 !
 interface cbslf_read(ctx, data, errcode)
-  type(cbslf_context), intent(in)  :: ctx
+  type(cbslf_context), intent(in)   :: ctx
   GENERIC_TYPE,         intent(out) :: data
   integer(4), intent(out), optional :: errcode
 end interface
@@ -336,7 +336,7 @@ end interface
 !      errcode  : error code (return value)
 !
 interface cbslf_record(ctx, data, errcode)
-  type(cbslf_context), intent(in)    :: ctx
+  type(cbslf_context), intent(in)     :: ctx
   GENERIC_TYPE,         intent(inout) :: data
   integer(4), intent(out), optional   :: errcode
 end interface
@@ -357,7 +357,7 @@ end interface
 !      errcode  : error code
 !
 interface cbslf_record_heap(ctx, data, errcode)
-  type(cbslf_context), intent(in)    :: ctx
+  type(cbslf_context), intent(in)     :: ctx
   GENERIC_TYPE,         intent(inout) :: data
   integer(4), intent(out), optional   :: errcode
 end interface
@@ -372,7 +372,7 @@ end interface
 !      success  : context mode
 !
 function cbslf_get_mode(ctx, errcode) result(mode)
-  type(cbslf_context), intent(in)  :: ctx
+  type(cbslf_context), intent(in)   :: ctx
   integer(4), intent(out), optional :: errcode
   integer(4)                        :: mode
 end function
@@ -386,7 +386,7 @@ end function
 !      errcode  : error code (return value)
 !
 subroutine cbslf_set_compression_level(ctx, clevel)
-  type(cbslf_context), intent(in)  :: ctx
+  type(cbslf_context), intent(in)   :: ctx
   ingeter(4),           intent(in)  :: clevel
   integer(4), intent(out), optional :: errcode
 end subroutine
@@ -401,7 +401,7 @@ end subroutine
 !      fail     : -1
 !
 function cbslf_get_compression_level(ctx, errcode) result(clevel)
-  type(cbslf_context), intent(in)  :: ctx
+  type(cbslf_context), intent(in)   :: ctx
   integer(4), intent(out), optional :: errcode
   ingeter(4),                       :: clevel
 end function
